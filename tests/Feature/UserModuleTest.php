@@ -11,9 +11,15 @@ class UserModuleTest extends TestCase
     /**  @test  */
     function it_loads_the_users_list_page()
     {
+
+        $this->withoutExceptionHandling();
+
         $this->get('/usuarios')
         	->assertStatus(200)
-        	->assertSee('Usuarios');
+        	->assertSee('Usuarios')
+            ->assertSee('Joel')
+            ->assertSee('Ellie')
+            ->assertSee('Tess');
     }
 
     /**  @test  */
@@ -27,6 +33,9 @@ class UserModuleTest extends TestCase
     /**  @test  */
     function it_loads_the_users_nuevo_page()
     {
+
+        $this->withoutExceptionHandling();
+
         $this->get('/usuarios/nuevo')
         	->assertStatus(200)
         	->assertSee('Crear usuario nuevo');    	
