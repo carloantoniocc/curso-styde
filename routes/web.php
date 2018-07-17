@@ -14,3 +14,30 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/usuarios', function() {
+	return 'Usuarios';
+});
+
+Route::get('usuarios/nuevo', function () {
+	return 'Crear usuario nuevo';
+});
+
+Route::get('usuarios/{id}', function ($id) {
+	return "Mostrando detalle del usuario: {$id}";
+});
+
+Route::get('/saludo/{name}/{nickname?}', function($name,$nickname = null) {
+	$name = ucfirst($name);
+
+	if ($nickname) {
+		return "Bienvenido {$name}, tu apodo es {$nickname}";
+	} else {
+		return "Bienvenido {$name}";
+	}	
+});
+
+Route::get('/usuarios/{id}/edit', function($id) {
+	return "usuario {$id} ha sido modificado";
+})->where('id','[0-9]+');
+
