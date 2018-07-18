@@ -11,18 +11,15 @@ class UserController extends Controller
     public function index()
     {
 
-    	$users = [
-    		'Joel',
-    		'Ellie',
-    		'Tess',
-    		'<script>alert("Clicker")</script>',
-
-
-    	];
+	   	if (request()->has('empty')) {
+    		$users =[];
+    	}else{
+	    	$users = [ 'Joel','Ellie','Tess',];
+    	}
 
     	$title = 'Listado de Usuarios';
 
-    	return view('users', compact('users','title'));
+    	return view('users.index', compact('users','title'));
     }
 
     public function show($id)
