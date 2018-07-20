@@ -5,12 +5,17 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\User;
 
 class UserModuleTest extends TestCase
 {
     /**  @test  */
     function it_loads_the_users_list_page()
     {
+
+        $user = User::all();
+
+        dd($user);
 
         $this->withoutExceptionHandling();
 
