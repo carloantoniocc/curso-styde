@@ -9,22 +9,19 @@ use App\User;
 
 class UserModuleTest extends TestCase
 {
+    use RefreshDatabase;
     /**  @test  */
     function it_loads_the_users_list_page()
     {
 
         $user = User::all();
 
-        dd($user);
-
         $this->withoutExceptionHandling();
 
         $this->get('/usuarios')
         	->assertStatus(200)
-        	->assertSee('Usuarios')
-            ->assertSee('Joel')
-            ->assertSee('Ellie')
-            ->assertSee('Tess');
+        	->assertSee('Usuarios');
+
     }
 
 
@@ -40,11 +37,18 @@ class UserModuleTest extends TestCase
 
 
     /**  @test  */
-    function it_loads_the_users_detail_page()
+    function it_displays_the_users_details()
     {
-        $this->get('/usuarios/5')
+
+        $this->withoutExceptionHandling();
+
+        $user = factory(User::class)->create([
+            'name' => 'Carlos Cornejo'
+        ]);
+
+        $this->get('/usuarios/' . $user->id)
         	->assertStatus(200)
-        	->assertSee('Mostrando detalle del usuario: 5');    	
+            ->assertSee('Carlos Cornejo');	
     }
 
     /**  @test  */
@@ -75,5 +79,64 @@ class UserModuleTest extends TestCase
 	
 	*/
 
+
+    /**  @test  */
+    function it_display_a_404_if_user_is_not_found()
+    {
+
+        $this->get('/usuarios/100000')
+            ->assertStatus(404) 
+            ->assertSee('Usuario no encontrado');
+    }
+
+    /**  @test  */
+    function it_create_a_new_user()
+    {
+
+        $this->withoutExceptionHandling();
+
+        $this->post('/usuarios/' , [
+            'name' => 'usuario prueba',
+            'email' => 'prueba@prueba.cl',
+            'password' => '123456',
+
+        ])->assertRedirect('usuarios');
+
+        $this->assertCredentials([
+
+            'name'  => 'usuario prueba',
+            'email' => 'prueba@prueba.cl',
+            'password' => '123456',
+
+        ]);
+           
+            
+    }
+
+    /**  @test  */
+    function the_name_is_required()
+    {
+
+        //$this->withoutExceptionHandling();
+
+        $this->from('usuarios/nuevo')
+            ->post('/usuarios/' , [
+            'name' => '',
+            'email' => 'prueba@prueba.cl',
+            'password' => '123456',
+
+        ])->assertRedirect('usuarios/nuevo')
+          ->assertSessionHasErrors(['name' => 'The name field is required.']);
+
+
+//        $this->assertDatabaseMissing('users', [
+//            'email' => 'prueba@prueba.cl',
+//
+//        ]);  
+
+          $this->assertEquals(0, User::count());
+
+
+    }
 
 }

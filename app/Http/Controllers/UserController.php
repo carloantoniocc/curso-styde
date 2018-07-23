@@ -20,15 +20,35 @@ class UserController extends Controller
 
     }
 
-    public function show($id)
+    public function show(User $user)
     {
-    	return "Mostrando detalle del usuario: {$id}";
+
+        return view('users.show',compact('user'));
     }
 
     public function create()
     {
-    	return 'Crear usuario nuevo';
+    	return view('users.create');
     }
+
+    public function store()
+    {
+
+        $data = request()->validate([
+            'name' => 'required',
+        ]);
+
+
+
+        User::create([
+            'name'  => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+
+        return redirect('usuarios');
+    }
+
     
     public function edit($id)
     {

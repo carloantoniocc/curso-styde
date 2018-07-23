@@ -17,11 +17,13 @@ Route::get('/', function () {
 
 Route::get('/usuarios', 'UserController@index');
 
-Route::get('/usuarios/{id}', 'UserController@show')->where('id','[0-9]+');
+Route::get('/usuarios/{user}', 'UserController@show')->where('user','[0-9]+');
 
 Route::get('usuarios/nuevo', 'UserController@create');
 
 Route::get('/saludo/{name}/{nickname?}', 'WelcomeUserController');
 
 Route::get('/usuarios/{id}/edit', 'UserController@edit')->where('id','[0-9]+');
+
+Route::post('/usuarios', 'UserController@store')->name('crearusuario');
 
