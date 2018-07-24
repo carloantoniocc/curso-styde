@@ -8,49 +8,60 @@
 
 @section('content')
 
-	<h1>{{ ($title) }}</h1>
+<br>
+<br>
 
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-				<div class="panel-heading">Listado de Usuarios</div>
-					<div class="panel-body">
+	<div class="d-flex justify-content-between align-items-end mb-3">
+	
+		<h1 class="pb-1">{{ ($title) }}</h1>
 
-						@if (! empty($users)) 
-							<div class="row">
-								<div class="col-md-12">
-									<table class="table table-striped">
-										<thead>
-										  <tr>
-											<th >Nombre Usuario</th>
-											<th>Email</th>
-											<th>Mostrar</th>
-										  </tr>
-										</thead>
-										<tbody>
-										  @foreach ($users as $user)
-										  <tr>
-											<td >{{ $user->name }}</td>
-											<td>{{ $user->email }}</td>
-											<td><a href="{{ URL::to('usuarios/' . $user->id ) }}">Mostrar</a></td>
-										  </tr>
-										  @endforeach
-										</tbody>
-									</table>
-								</div>
-							</div>
+		<p>
+			<a class="btn btn-primary" href="{{ route('users.create' ) }}">Nuevo Usuario</a>
+		</p>
 
-
-
-						@else
-							<p>No existen usuarios registrados</p>
-						@endif
-
-
-					</div>
-			</div>
-		</div>	
 	</div>
+
+@if ($users->isNotEmpty() ) 
+	<table class="table">
+	  <thead class="thead-dark">
+	    <tr>
+	      <th scope="col">#</th>
+	      <th scope="col">Nombre Usuario</th>
+	      <th scope="col">Email</th>
+	      <th scope="col">Acciones</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+
+		@foreach ($users as $user)
+
+	    <tr>
+	      <th scope="row">{{ $user->id }}</th>
+		  <td >{{ $user->name }}</td>
+		  <td>{{ $user->email }}</td>
+		  <td>
+		  	<a href="{{ route('users.show', $user ) }}">Ver Detalles</a> |
+		  	<a href="{{ route('users.edit', $user ) }}">Editar</a>
+		  	<form action="{{ route('users.destroy', $user ) }}" method="POST">
+				{{ csrf_field() }}
+				{{ method_field('delete') }}
+
+				<button type="submit">Eliminar</button>													
+			</form>
+		  </td>
+	    </tr>
+
+
+		@endforeach
+
+	  </tbody>
+	</table>
+
+@else
+	<p>No existen usuarios registrados</p>
+@endif
+
+
 
 
 @endsection('content')

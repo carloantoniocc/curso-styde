@@ -15,15 +15,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/usuarios', 'UserController@index');
+Route::get('/usuarios', 'UserController@index')->name('users.index');
 
-Route::get('/usuarios/{user}', 'UserController@show')->where('user','[0-9]+');
+Route::get('/usuarios/{user}', 'UserController@show')->where('user','[0-9]+')->name('users.show');
 
-Route::get('usuarios/nuevo', 'UserController@create');
+Route::get('usuarios/nuevo', 'UserController@create')->name('users.create');
+
+Route::post('/usuarios', 'UserController@store')->name('crearusuario');
+
+Route::get('/usuarios/{user}/edit', 'UserController@edit')->where('user','[0-9]+')->name('users.edit');
+
+Route::put('/usuarios/{user}', 'UserController@update')->where('user','[0-9]+')->name('users.update');
 
 Route::get('/saludo/{name}/{nickname?}', 'WelcomeUserController');
 
-Route::get('/usuarios/{id}/edit', 'UserController@edit')->where('id','[0-9]+');
+Route::delete('/usuarios/{user}' , 'UserController@destroy')->name('users.destroy');
 
-Route::post('/usuarios', 'UserController@store')->name('crearusuario');
+
+
+
 
